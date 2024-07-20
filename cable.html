@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+  <div class="container mt-5">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">
+              <i class="fas fa-book"></i> Books Count
+            </h5>
+            <div id="books_count" class="card-text">Books: 0</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">
+              <i class="fas fa-user"></i> Authors Count
+            </h5>
+            <div id="authors_count" class="card-text">Authors: 0</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS and dependencies -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  
+  <!-- ActionCable JS -->
+  <script src="https://cdn.jsdelivr.net/npm/actioncable@5.2.8-1/lib/assets/compiled/action_cable.min.js"></script>
+  <script>
+    const cable = ActionCable.createConsumer('ws://localhost:3000/cable');
+
+    cable.subscriptions.create('DashboardChannel', {
+      received(data) {
+        const booksCountDiv = document.getElementById('books_count');
+        const authorsCountDiv = document.getElementById('authors_count');
+        booksCountDiv.innerHTML = `Books: ${data.books_count}`;
+        authorsCountDiv.innerHTML = `Authors: ${data.authors_count}`;
+      }
+    });
+  </script>
+</body>
+</html>
